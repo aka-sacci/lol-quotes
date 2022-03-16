@@ -3,7 +3,7 @@ import styled from 'styled-components'
 function ChampionImage(props) {
     const { champion } = props
     return (
-        <Img src={`images/${champion}.png`} alt="Champion" width="900" height="506"/>
+        <Img src={`images/${champion}.png`} alt="Champion" />
     );
   }
   
@@ -12,4 +12,6 @@ function ChampionImage(props) {
   const Img = styled.img`
     max-width: 80vw;
     align-self: flex-end;
+    width: 900px; 
+    height: 506px
   `

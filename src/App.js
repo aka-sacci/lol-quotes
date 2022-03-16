@@ -12,46 +12,84 @@ import GetApiData from './services/GetApiData'
 import PlayAudio from "./services/PlayAudio";
 import SelectQuoteIndex from "./services/SelectQuote";
 
+//ButtonStyles
+import QuoteButtonStyle from './components/Button/styles/QuoteButon'
+import MuteButtonStyle from './components/Button/styles/MuteButton'
+
 
 function App() {
   const [champion, setChampion] = useState("Mordekaiser")
   const [quote, setQuote] = useState("Lol Quotes")
   const [quoteLength, setQuoteLength] = useState()
   const [quoteIndex, setQuoteIndex] = useState()
-  const [isButtonDisabled, setIsButtonDisabled] = useState(false)
+  const [isQuoteButtonDisabled, setIsQuoteButtonDisabled] = useState(false)
+  const [isMuteButtonDisabled, setIsMuteButtonDisabled] = useState(false)
+  const [isMuted, setIsMuted] = useState(false)
   const [initialRender, setInitialRender] = useState(true)
   
   useEffect(() => {
     if(initialRender) {
        setInitialRender(false)
     } else {
-    handleAudio(quoteIndex)
+    if (!isMuted) handleAudio(quoteIndex)
     }
   }, [quoteIndex]);
 
 
-  const handleClick = async () => {
+  const handleQuoteClick = async () => {
     const quotes = await GetApiData()
     const quoteIndex = SelectQuoteIndex(quotes.length)
-    setChampion(quotes[quoteIndex].champion)
-    setQuote(quotes[quoteIndex].quote)
-    setQuoteLength(quotes[quoteIndex].length)
+    const { champion, quote, length } = quotes[quoteIndex]
+    setChampion(champion)
+    setQuote(quote)
+    setQuoteLength(length)
     setQuoteIndex(quoteIndex)
   }
 
-  const handleAudio = async (quoteToPlay) => {
-    setIsButtonDisabled(true)
+  const handleMuteClick = () => {
+    setIsMuted(!isMuted)
+
+  }
+
+  const handleAudio = (quoteToPlay) => {
+    setIsQuoteButtonDisabled(true)
+    setIsMuteButtonDisabled(true)
     PlayAudio(quoteToPlay)
-    setTimeout(() => setIsButtonDisabled(false), quoteLength)  
+
+    setTimeout(() => {
+      setIsQuoteButtonDisabled(false)
+      setIsMuteButtonDisabled(false)
+    }, quoteLength)  
+
   } 
 
   return (
     <Content className="container">
       <QuoteDiv className="container">
-      <Quote quote={quote} champion={champion} />
+
+      <Quote 
+      quote={quote} 
+      champion={champion} 
+      />
+
       </QuoteDiv>
-    <ChampionImage champion={champion}/>
-    <Button text="Say" onClick={handleClick} disabled={isButtonDisabled}/>
+
+    <ChampionImage 
+    champion={champion}
+    />
+
+    <Button text="Say" 
+    onClick={handleQuoteClick} 
+    disabled={isQuoteButtonDisabled} 
+    theme={QuoteButtonStyle} 
+    />
+
+    <Button text={null}
+    onClick={handleMuteClick} 
+    disabled={isMuteButtonDisabled} 
+    theme={MuteButtonStyle(isMuted)} 
+    />
+    
     </Content>
   );
 }
@@ -70,8 +108,3 @@ const Content = styled.div`
    align-items: center;
    
   `
-
-
-
-
-
