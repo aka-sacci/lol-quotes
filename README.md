@@ -1,7 +1,8 @@
 # lol-quotes
 
 React application that plays quotes of some League of Legends characters.
-Made for train some React concepts
+
+Made for train some React concepts and for a code challenge on [DIO](https://www.dio.me/)
 
 
 ## How to use
