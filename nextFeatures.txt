@@ -1,0 +1,1 @@
+- Make a component to display errors

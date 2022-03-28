@@ -7,15 +7,15 @@ import ChampionImage from "./components/ChampionImage"
 import Quote from "./components/Quote";
 import Button from "./components/Button";
 
-//Services
-import GetApiData from './services/GetApiData'
-import PlayAudio from "./services/PlayAudio";
-import SelectQuoteIndex from "./services/SelectQuote";
-
 //ButtonStyles
 import QuoteButtonStyle from './components/Button/styles/QuoteButon'
 import MuteButtonStyle from './components/Button/styles/MuteButton'
 
+//Services
+import PlayAudio from "./services/PlayAudio";
+import SelectQuoteIndex from "./services/SelectQuote";
+const getApiData = require('./services/GetApiData')
+const GetApiData = new getApiData()
 
 function App() {
   const [champion, setChampion] = useState("Mordekaiser")
@@ -26,24 +26,29 @@ function App() {
   const [isMuteButtonDisabled, setIsMuteButtonDisabled] = useState(false)
   const [isMuted, setIsMuted] = useState(false)
   const [initialRender, setInitialRender] = useState(true)
-  
+
   useEffect(() => {
-    if(initialRender) {
-       setInitialRender(false)
+    if (initialRender) {
+      setInitialRender(false)
     } else {
-    if (!isMuted) handleAudio(quoteIndex)
+      if (!isMuted) handleAudio(quoteIndex)
     }
   }, [quoteIndex]);
 
 
   const handleQuoteClick = async () => {
-    const quotes = await GetApiData()
-    const quoteIndex = SelectQuoteIndex(quotes.length)
-    const { champion, quote, length } = quotes[quoteIndex]
-    setChampion(champion)
-    setQuote(quote)
-    setQuoteLength(length)
-    setQuoteIndex(quoteIndex)
+
+    try {
+      const quotesQtd = await GetApiData.getQtdQuotes()
+      const quoteIndex = SelectQuoteIndex(quotesQtd)
+      const { champion, quote, length } = await GetApiData.getQuote(quoteIndex)
+      setChampion(champion)
+      setQuote(quote)
+      setQuoteLength(length)
+      setQuoteIndex(quoteIndex)
+    } catch (err) {
+      console.log(err)
+    }
   }
 
   const handleMuteClick = () => {
@@ -59,37 +64,37 @@ function App() {
     setTimeout(() => {
       setIsQuoteButtonDisabled(false)
       setIsMuteButtonDisabled(false)
-    }, quoteLength)  
+    }, quoteLength)
 
-  } 
+  }
 
   return (
     <Content className="container">
       <QuoteDiv className="container">
 
-      <Quote 
-      quote={quote} 
-      champion={champion} 
-      />
+        <Quote
+          quote={quote}
+          champion={champion}
+        />
 
       </QuoteDiv>
 
-    <ChampionImage 
-    champion={champion}
-    />
+      <ChampionImage
+        champion={champion}
+      />
 
-    <Button text="Say" 
-    onClick={handleQuoteClick} 
-    disabled={isQuoteButtonDisabled} 
-    theme={QuoteButtonStyle} 
-    />
+      <Button text="Say"
+        onClick={handleQuoteClick}
+        disabled={isQuoteButtonDisabled}
+        theme={QuoteButtonStyle}
+      />
 
-    <Button text={null}
-    onClick={handleMuteClick} 
-    disabled={isMuteButtonDisabled} 
-    theme={MuteButtonStyle(isMuted)} 
-    />
-    
+      <Button text={null}
+        onClick={handleMuteClick}
+        disabled={isMuteButtonDisabled}
+        theme={MuteButtonStyle(isMuted)}
+      />
+
     </Content>
   );
 }
