@@ -1,11 +1,12 @@
 import { createGlobalStyle } from "styled-components";
-import background from "../images/background.jpg"
+const background = require("../images/background.jpg")
 
-export const GlobalStyle = createGlobalStyle`
+const GlobalStyle = createGlobalStyle`
     body{
         font-family: 'Marcellus SC', sans-serif;
         background: url(${background}) center no-repeat;
-        
     }
     `
 ;
+
+export default GlobalStyle

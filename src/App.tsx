@@ -3,31 +3,33 @@ import { useState, useEffect } from "react";
 import styled from 'styled-components'
 
 //Components
-import ChampionImage from "./components/ChampionImage"
-import Quote from "./components/Quote";
 import Button from "./components/Button";
+import ChampionImage from "./components/ChampionImage"
 import ErrorWrapper from "./components/ErrorWrapper";
+import Quote from "./components/Quote";
 
 //ButtonStyles
-import QuoteButtonStyle from './components/Button/styles/QuoteButon'
 import MuteButtonStyle from './components/Button/styles/MuteButton'
+import QuoteButtonStyle from './components/Button/styles/QuoteButton'
+
 
 //Services
-import PlayAudio from "./services/PlayAudio";
-import SelectQuoteIndex from "./services/SelectQuote";
-const getApiData = require('./services/GetApiData')
+import getApiData from './services/GetApiData/index'
+import playAudio from "./services/PlayAudio";
+import selectQuoteIndex from "./services/SelectQuote";
 const GetApiData = new getApiData()
 
 function App() {
-  const [champion, setChampion] = useState("Mordekaiser")
-  const [quote, setQuote] = useState("Lol Quotes")
-  const [quoteLength, setQuoteLength] = useState()
-  const [quoteIndex, setQuoteIndex] = useState()
-  const [isQuoteButtonDisabled, setIsQuoteButtonDisabled] = useState(false)
-  const [isMuteButtonDisabled, setIsMuteButtonDisabled] = useState(false)
-  const [isMuted, setIsMuted] = useState(false)
-  const [initialRender, setInitialRender] = useState(true)
-  const [error, setError] = useState(false)
+  const [champion, setChampion] = useState<string | null>(null)
+  const [quote, setQuote] = useState<string>("Lol Quotes")
+  const [quoteLength, setQuoteLength] = useState<number>(0)
+  const [quoteIndex, setQuoteIndex] = useState<number>(-1)
+  const [isQuoteButtonDisabled, setIsQuoteButtonDisabled] = useState<boolean>(false)
+  const [isMuteButtonDisabled, setIsMuteButtonDisabled] = useState<boolean>(false)
+  const [isMuted, setIsMuted] = useState<boolean>(false)
+  const [initialRender, setInitialRender] = useState<boolean>(true)
+  const [error, setError] = useState<Error>(Error)
+  const [errorBool, setErrorBool] = useState<boolean>(false)
 
   useEffect(() => {
     if (initialRender) {
@@ -38,29 +40,31 @@ function App() {
   }, [quoteIndex]);
 
   useEffect(() => {
-    if(!error) {
+    if (!error) {
       return
     }
     else {
       setTimeout(() => {
-        setError(false)
-      }, 60000)
+        setErrorBool(false)
+      }, 5000)
     }
-  }, [error])
+  }, [errorBool])
 
 
   const handleQuoteClick = async () => {
 
     try {
-      const quotesQtd = await GetApiData.getQtdQuotes()
-      const quoteIndex = SelectQuoteIndex(quotesQtd)
-      const { champion, quote, length } = await GetApiData.getQuote(quoteIndex)
+      const auxQuoteQtd = await GetApiData.getQtdQuotes()
+      const auxQuoteIndex = selectQuoteIndex(auxQuoteQtd)
+      const { champion, quote, length } = await GetApiData.getQuote(auxQuoteIndex)
       setChampion(champion)
       setQuote(quote)
       setQuoteLength(length)
-      setQuoteIndex(quoteIndex)
-    } catch (err) {
+      setErrorBool(false)
+      setQuoteIndex(auxQuoteIndex)
+    } catch (err: any) {
       setError(err)
+      setErrorBool(true)
     }
   }
 
@@ -69,10 +73,10 @@ function App() {
 
   }
 
-  const handleAudio = (quoteToPlay) => {
+  const handleAudio = (quoteToPlay: any) => {
     setIsQuoteButtonDisabled(true)
     setIsMuteButtonDisabled(true)
-    PlayAudio(quoteToPlay)
+    playAudio(quoteToPlay)
 
     setTimeout(() => {
       setIsQuoteButtonDisabled(false)
@@ -84,7 +88,7 @@ function App() {
   return (
     <>
       <Content className="container">
-      {!error ? null : <ErrorWrapper error={error}></ErrorWrapper>}
+        {!errorBool ? null : <ErrorWrapper error={error} />}
         <QuoteDiv className="container">
           <Quote
             quote={quote}

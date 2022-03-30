@@ -1,9 +1,17 @@
+import iResponse from '../../interfaces/iResponses'
+
 const axios = require('axios');
 
-class getApiData {
+interface iGetApiData {
+    getQtdQuotes: () => Promise<object>,
+    getQuote: (index: number) => Promise<object>
+}
+
+
+class getApiData implements iGetApiData {
     async getQtdQuotes() {
         const result = await axios.get('http://localhost:3333/getqtdquotes')
-            .then(response => {
+            .then((response: iResponse) => {
                 switch (response.status) {
                     case 200:
                         return response.data.qtd
@@ -15,7 +23,7 @@ class getApiData {
                 }
 
             })
-            .catch((err) => {
+            .catch((err: Error) => {
                 const defaultErrorToBeThrown = new Error()
                 defaultErrorToBeThrown.message = err.message
                 defaultErrorToBeThrown.name = "INTERNAL_ERROR"
@@ -27,9 +35,9 @@ class getApiData {
         return result
     }
 
-    async getQuote(index) {
+    async getQuote( index: number ) {
         const result = await axios.get('http://localhost:3333/getquotes/' + index)
-            .then(response => {
+            .then((response: iResponse) => {
                 switch (response.status) {
                     case 200:
                         return response.data.quote
@@ -40,7 +48,7 @@ class getApiData {
                         throw defaultErrorToBeThrown
                 }
             })
-            .catch((err) => {
+            .catch((err: Error) => {
                 const defaultErrorToBeThrown = new Error()
                 defaultErrorToBeThrown.message = err.message
                 defaultErrorToBeThrown.name = "INTERNAL_ERROR"
@@ -51,4 +59,4 @@ class getApiData {
     }
 }
 
-module.exports = getApiData
+export default getApiData

@@ -1,0 +1,4 @@
+- Add hook useMemo in the champion images
+- Navigation in React?
+- Add quotes 
+- Authenticate with JWT

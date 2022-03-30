@@ -1,7 +1,12 @@
 import styled from 'styled-components'
 
-function ErrorWrapper(props) {
+interface iErrorWrapperProps {
+    error: Error
+}
+
+function ErrorWrapper(props: iErrorWrapperProps): JSX.Element {
     const { error } = props
+        
         const message = error.message
         const name = error.name
         return (
