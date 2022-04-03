@@ -1,1 +1,6 @@
-- Make a component to display errors
+- Make a component to display errors -> OK!
+- Refactor Types -> OK!
+- Optimize ChampionImage load
+- Navigation in React?
+- Add quotes 
+- Authenticate with JWT

@@ -17,9 +17,11 @@ import QuoteButtonStyle from './components/Button/styles/QuoteButton'
 import getApiData from './services/GetApiData/index'
 import playAudio from "./services/PlayAudio";
 import selectQuoteIndex from "./services/SelectQuote";
+import { iQuotes } from "./@types/myTypes";
 const GetApiData = new getApiData()
 
 function App() {
+  const [quotes, setQuotes] = useState<any>()
   const [champion, setChampion] = useState<string | null>(null)
   const [quote, setQuote] = useState<string>("Lol Quotes")
   const [quoteLength, setQuoteLength] = useState<number>(0)
@@ -31,6 +33,7 @@ function App() {
   const [error, setError] = useState<Error>(Error)
   const [errorBool, setErrorBool] = useState<boolean>(false)
 
+  //Audio
   useEffect(() => {
     if (initialRender) {
       setInitialRender(false)
@@ -39,6 +42,7 @@ function App() {
     }
   }, [quoteIndex]);
 
+  //Error
   useEffect(() => {
     if (!error) {
       return
@@ -50,30 +54,45 @@ function App() {
     }
   }, [errorBool])
 
+  //Quotes
+  useEffect(() => {
+    const fetchAllQuotes = async () => {
+      const data = await GetApiData.getAllQuotes()
+      return data
+    }
+    
+    fetchAllQuotes()
+      .then
+      ((data: iQuotes) => {
+        setQuotes(data)
+      })
+      .catch((err: any) => {
+        setError(err)
+        setErrorBool(true)
+      })
+
+  }, [])
+
 
   const handleQuoteClick = async () => {
 
-    try {
-      const auxQuoteQtd = await GetApiData.getQtdQuotes()
+      const auxQuoteQtd = quotes.length
       const auxQuoteIndex = selectQuoteIndex(auxQuoteQtd)
-      const { champion, quote, length } = await GetApiData.getQuote(auxQuoteIndex)
+      const { champion, quote, length } = quotes[auxQuoteIndex]
       setChampion(champion)
       setQuote(quote)
       setQuoteLength(length)
       setErrorBool(false)
       setQuoteIndex(auxQuoteIndex)
-    } catch (err: any) {
-      setError(err)
-      setErrorBool(true)
-    }
+  
   }
 
   const handleMuteClick = () => {
     setIsMuted(!isMuted)
-
   }
 
   const handleAudio = (quoteToPlay: any) => {
+    
     setIsQuoteButtonDisabled(true)
     setIsMuteButtonDisabled(true)
     playAudio(quoteToPlay)
@@ -94,7 +113,6 @@ function App() {
             quote={quote}
             champion={champion}
           />
-
         </QuoteDiv>
 
         <ChampionImage

@@ -1,8 +1,6 @@
 import styled from 'styled-components'
+import { iChampionImageProps } from "@app/@types/myTypes";
 
-interface iChampionImageProps {
-  champion: string | null
-}
 function ChampionImage(props: iChampionImageProps): JSX.Element {
   const { champion } = props
   return (

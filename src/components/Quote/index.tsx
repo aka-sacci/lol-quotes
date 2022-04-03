@@ -1,8 +1,5 @@
 import styled from 'styled-components'
-interface iQuoteProps {
-    quote: string,
-    champion: string | null
-}
+import { iQuoteProps } from "@app/@types/myTypes";
 
 function Quote (props: iQuoteProps) {
     const {quote, champion} = props

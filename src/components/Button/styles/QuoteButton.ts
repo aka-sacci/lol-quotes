@@ -1,4 +1,4 @@
-import iButtonTheme from '../../../interfaces/iButtonTheme'
+import { iButtonTheme } from "@app/@types/myTypes";
 
 const QuoteButtonStyle: iButtonTheme = {
     alignSelf: 'flex-end',

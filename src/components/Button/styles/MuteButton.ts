@@ -1,4 +1,4 @@
-import iButtonTheme from '../../../interfaces/iButtonTheme'
+import { iButtonTheme } from "@app/@types/myTypes";
 const mutedIcon = require("../../../images/icons/mutedIcon.png")
 const unmutedIcon = require("../../../images/icons/unmutedIcon.png")
 

@@ -1,6 +1,6 @@
 import { ThemeProvider } from 'styled-components';
 import GlobalButton from './styles'
-import iButtonTheme from '../../interfaces/iButtonTheme'
+import { iButtonTheme } from "@app/@types/myTypes";
 interface iButtonProps {
   text: string | null,
   onClick: () => void,

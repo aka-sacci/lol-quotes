@@ -1,8 +1,5 @@
 import styled from 'styled-components'
-
-interface iErrorWrapperProps {
-    error: Error
-}
+import { iErrorWrapperProps } from "@app/@types/myTypes";
 
 function ErrorWrapper(props: iErrorWrapperProps): JSX.Element {
     const { error } = props
