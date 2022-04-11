@@ -7,7 +7,7 @@ function ErrorWrapper(props: iErrorWrapperProps): JSX.Element {
         const message = error.message
         const name = error.name
         return (
-            <DivErrorWrapper className='alert alert-warning' role='alert'><b>Houve um erro ao recuperar as falas: {name}: {message}</b></DivErrorWrapper>
+            <DivErrorWrapper className='alert alert-warning' role='alert'><b>Houve o seguinte erro: {name}: {message}. Tente recarregar a página novamente</b></DivErrorWrapper>
         )
 }
 

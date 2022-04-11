@@ -42,25 +42,13 @@ function App() {
     }
   }, [quoteIndex]);
 
-  //Error
-  useEffect(() => {
-    if (!error) {
-      return
-    }
-    else {
-      setTimeout(() => {
-        setErrorBool(false)
-      }, 5000)
-    }
-  }, [errorBool])
-
   //Quotes
   useEffect(() => {
     const fetchAllQuotes = async () => {
       const data = await GetApiData.getAllQuotes()
       return data
     }
-    
+
     fetchAllQuotes()
       .then
       ((data: iQuotes) => {
@@ -75,7 +63,7 @@ function App() {
 
 
   const handleQuoteClick = async () => {
-
+    try {
       const auxQuoteQtd = quotes.length
       const auxQuoteIndex = selectQuoteIndex(auxQuoteQtd)
       const { champion, quote, length } = quotes[auxQuoteIndex]
@@ -84,6 +72,10 @@ function App() {
       setQuoteLength(length)
       setErrorBool(false)
       setQuoteIndex(auxQuoteIndex)
+    } catch(err: any) {
+      setError(err)
+      setErrorBool(true)
+    }
   
   }
 
@@ -92,7 +84,7 @@ function App() {
   }
 
   const handleAudio = (quoteToPlay: any) => {
-    
+
     setIsQuoteButtonDisabled(true)
     setIsMuteButtonDisabled(true)
     playAudio(quoteToPlay)
