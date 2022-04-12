@@ -59,6 +59,11 @@ interface iQuotes {
 }
 
 
+interface iMainWrapperProps {
+    background: string,
+    children: object
+}
+
 export { 
     iButtonTheme,
     iResponse,
@@ -68,5 +73,6 @@ export {
     iQuoteProps,
     iGetApiData,
     iQuote,
-    iQuotes
+    iQuotes,
+    iMainWrapperProps
 }

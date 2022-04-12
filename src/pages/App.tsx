@@ -3,22 +3,24 @@ import { useState, useEffect } from "react";
 import styled from 'styled-components'
 
 //Components
-import Button from "./components/Button";
-import ChampionImage from "./components/ChampionImage"
-import ErrorWrapper from "./components/ErrorWrapper";
-import Quote from "./components/Quote";
+import Button from "../components/Button";
+import ChampionImage from "../components/ChampionImage"
+import ErrorWrapper from "../components/ErrorWrapper";
+import Quote from "../components/Quote";
+import MainWrapper from "../components/MainWrapper";
 
 //ButtonStyles
-import MuteButtonStyle from './components/Button/styles/MuteButton'
-import QuoteButtonStyle from './components/Button/styles/QuoteButton'
+import MuteButtonStyle from '../components/Button/styles/MuteButton'
+import QuoteButtonStyle from '../components/Button/styles/QuoteButton'
 
 
 //Services
-import getApiData from './services/GetApiData/index'
-import playAudio from "./services/PlayAudio";
-import selectQuoteIndex from "./services/SelectQuote";
-import { iQuotes } from "./@types/myTypes";
+import getApiData from '../services/GetApiData/index'
+import playAudio from "../services/PlayAudio";
+import selectQuoteIndex from "../services/SelectQuote";
+import { iQuotes } from "../@types/myTypes";
 const GetApiData = new getApiData()
+const background = require("../images/background.jpg")
 
 function App() {
   const [quotes, setQuotes] = useState<any>()
@@ -97,8 +99,7 @@ function App() {
   }
 
   return (
-    <>
-      <Content className="container">
+    <MainWrapper background={background}>
         {!errorBool ? null : <ErrorWrapper error={error} />}
         <QuoteDiv className="container">
           <Quote
@@ -122,8 +123,7 @@ function App() {
           disabled={isMuteButtonDisabled}
           theme={MuteButtonStyle(isMuted)}
         />
-      </Content>
-    </>
+    </MainWrapper>
   );
 }
 
@@ -133,11 +133,3 @@ const QuoteDiv = styled.div`
   position: absolute;
   top: 4.3rem;
 `
-
-const Content = styled.div`
-   height: 100vh;
-   display: flex;
-   justify-content: center;
-   align-items: center;
-   
-  `
