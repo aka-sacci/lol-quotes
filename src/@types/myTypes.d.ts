@@ -64,6 +64,11 @@ interface iMainWrapperProps {
     children: object
 }
 
+interface iLoginWrapperProps {
+    type: "auth" | "create",
+
+}
+
 export { 
     iButtonTheme,
     iResponse,
@@ -74,5 +79,6 @@ export {
     iGetApiData,
     iQuote,
     iQuotes,
-    iMainWrapperProps
+    iMainWrapperProps,
+    iLoginWrapperProps
 }
