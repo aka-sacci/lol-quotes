@@ -5,7 +5,7 @@ const background = require("../images/riot-wallpaper2.jpg")
 function CreateUser() {
     return (
         <MainWrapper background={background}>
-                <LoginWrapper type='auth'></LoginWrapper>
+                <LoginWrapper type='create'></LoginWrapper>
         </MainWrapper>
     )
 }

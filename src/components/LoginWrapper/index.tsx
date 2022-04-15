@@ -1,5 +1,6 @@
 import styled from 'styled-components'
 import { iLoginWrapperProps } from "../../@types/myTypes";
+import FormCreateUser from '../FormCreateUser';
 
 const riotLogo = require("../../images/riot-logo.png")
 function LoginWrapper(props: iLoginWrapperProps) {
@@ -10,6 +11,7 @@ function LoginWrapper(props: iLoginWrapperProps) {
                 <img src={riotLogo} height='50' alt='Logo' />
             </LogoDiv>
             <CreateUserDiv>
+            <FormCreateUser/>
             </CreateUserDiv>
         </>
     )
@@ -23,6 +25,6 @@ const LogoDiv = styled.div`
 `
 const CreateUserDiv = styled.div`
     background-color: #f9f9f9;
-    height: 75vh;
+    height: 70vh;
     width: 50vh;
 `

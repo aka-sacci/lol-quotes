@@ -69,6 +69,13 @@ interface iLoginWrapperProps {
 
 }
 
+interface iEvent {
+    target: {
+        value: string,
+        name: string
+    }
+}
+
 export { 
     iButtonTheme,
     iResponse,
@@ -80,5 +87,6 @@ export {
     iQuote,
     iQuotes,
     iMainWrapperProps,
-    iLoginWrapperProps
+    iLoginWrapperProps,
+    iEvent
 }
