@@ -1,5 +1,5 @@
 //Dependencies
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import styled from 'styled-components'
 
 //Components
@@ -31,16 +31,16 @@ function App() {
   const [isQuoteButtonDisabled, setIsQuoteButtonDisabled] = useState<boolean>(false)
   const [isMuteButtonDisabled, setIsMuteButtonDisabled] = useState<boolean>(false)
   const [isMuted, setIsMuted] = useState<boolean>(false)
-  const [initialRender, setInitialRender] = useState<boolean>(true)
+  const isMounted = useRef(false);
   const [error, setError] = useState<Error>(Error)
   const [errorBool, setErrorBool] = useState<boolean>(false)
 
   //Audio
   useEffect(() => {
-    if (initialRender) {
-      setInitialRender(false)
-    } else {
+    if (isMounted.current) {
       if (!isMuted) handleAudio(quoteIndex)
+    } else {
+      isMounted.current = true
     }
   }, [quoteIndex]);
 
@@ -74,11 +74,11 @@ function App() {
       setQuoteLength(length)
       setErrorBool(false)
       setQuoteIndex(auxQuoteIndex)
-    } catch(err: any) {
+    } catch (err: any) {
       setError(err)
       setErrorBool(true)
     }
-  
+
   }
 
   const handleMuteClick = () => {
@@ -100,29 +100,29 @@ function App() {
 
   return (
     <MainWrapper background={background}>
-        {!errorBool ? null : <ErrorWrapper error={error} />}
-        <QuoteDiv className="container">
-          <Quote
-            quote={quote}
-            champion={champion}
-          />
-        </QuoteDiv>
-
-        <ChampionImage
+      {!errorBool ? null : <ErrorWrapper error={error} />}
+      <QuoteDiv className="container">
+        <Quote
+          quote={quote}
           champion={champion}
         />
+      </QuoteDiv>
 
-        <Button text="Say"
-          onClick={handleQuoteClick}
-          disabled={isQuoteButtonDisabled}
-          theme={QuoteButtonStyle}
-        />
+      <ChampionImage
+        champion={champion}
+      />
 
-        <Button text={null}
-          onClick={handleMuteClick}
-          disabled={isMuteButtonDisabled}
-          theme={MuteButtonStyle(isMuted)}
-        />
+      <Button text="Say"
+        onClick={handleQuoteClick}
+        disabled={isQuoteButtonDisabled}
+        theme={QuoteButtonStyle}
+      />
+
+      <Button text={null}
+        onClick={handleMuteClick}
+        disabled={isMuteButtonDisabled}
+        theme={MuteButtonStyle(isMuted)}
+      />
     </MainWrapper>
   );
 }

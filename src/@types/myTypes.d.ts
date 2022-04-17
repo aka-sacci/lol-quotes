@@ -21,7 +21,9 @@ interface iResponse {
 interface iResponseGetApiData {
     qtd?: number,
     quote?: iQuote,
-    quotes?: [iQuote]
+    quotes?: [iQuote],
+    token?: string,
+    error?: Error 
 }
 
 interface iChampionImageProps {
@@ -76,6 +78,28 @@ interface iEvent {
     }
 }
 
+interface iCreateUser {
+    async execute: (props: iCreateUserProps) => Promise<string>,
+    token: string
+}
+
+interface iCreateUserProps {
+    name: string,
+    email: string,
+    password: string
+}
+
+interface iLoginUser {
+    async execute: (props: iLoginUserProps) => Promise<string>
+    token: string
+}
+
+interface iLoginUserProps {
+    email: string,
+    password: string
+    
+}
+
 export { 
     iButtonTheme,
     iResponse,
@@ -88,5 +112,9 @@ export {
     iQuotes,
     iMainWrapperProps,
     iLoginWrapperProps,
-    iEvent
+    iEvent,
+    iCreateUser,
+    iCreateUserProps,
+    iLoginUser,
+    iLoginUserProps
 }

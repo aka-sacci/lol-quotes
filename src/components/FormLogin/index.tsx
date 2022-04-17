@@ -1,52 +1,32 @@
-import { iCreateUser, iEvent } from '@app/@types/myTypes'
-import { useEffect, useRef, useState } from 'react'
+import { iEvent } from '@app/@types/myTypes'
+import { useEffect, useState } from 'react'
 import styled, { ThemeProvider } from 'styled-components'
 import { ArrowRight } from "react-bootstrap-icons"
-import createUser from '../../services/CreateUser'
+import loginUser from '../../services/LoginUser'
 import ErrorWrapper from '../ErrorWrapper'
 import { useNavigate } from 'react-router-dom'
 
 
-function FormCreateUser() {
-    const isMounted = useRef(false);
-    const [inputName, setInputName] = useState<string>("")
+function FormLogin() {
     const [inputEmail, setInputEmail] = useState<string>("")
     const [inputPassword, setInputPassword] = useState<string>("")
-    const [inputConfirmPassword, setInputConfirmPassword] = useState<string>("")
-    const [differentPasswordsBool, setDifferentPasswordsBool] = useState<boolean>(false)
     const [error, setError] = useState<Error>(Error)
     const [errorBool, setErrorBool] = useState<boolean>(false)
-    const CreateUser: iCreateUser = new createUser()
     const [isOpened, setIsOpened] = useState(false)
     const nav = useNavigate()
-
+    const LoginUser = new loginUser()
 
     useEffect(() => {
         setIsOpened(true)
     }, [])
 
-    useEffect(() => {
-        if (isMounted.current) {
-            if (inputConfirmPassword === inputPassword) return setDifferentPasswordsBool(false)
-            else return setDifferentPasswordsBool(true)
-        } else {
-            isMounted.current = true
-        }
-    }, [inputPassword, inputConfirmPassword])
-
     const inputsHandler = (e: iEvent) => {
         switch (e.target.name) {
-            case "name":
-                setInputName(e.target.value)
-                break
             case "email":
                 setInputEmail(e.target.value)
                 break
             case "password":
                 setInputPassword(e.target.value)
-                break
-            case "confirmPassword":
-                setInputConfirmPassword(e.target.value)
                 break
         }
     }
@@ -55,8 +35,8 @@ function FormCreateUser() {
         e.preventDefault()
         setErrorBool(false)
         try {
-            await CreateUser.execute({ email: inputEmail, password: inputPassword, name: inputName })
-            nav('/createuser/success')
+            await LoginUser.execute({ email: inputEmail, password: inputPassword })
+            nav('/admpanel')
 
         } catch (err: any) {
             setError(err)
@@ -70,16 +50,9 @@ function FormCreateUser() {
             <ThemeProvider theme={
                 { open: isOpened }
             }>
-                <Title>Create User</Title>
+                <Title>Login</Title>
                 <InputMain>
                     <form onSubmit={submitHandler}>
-                        <Input
-                            type="input"
-                            placeholder="NAME"
-                            name="name"
-                            onChange={inputsHandler}
-                            value={inputName}
-                            required />
 
                         <Input
                             type="email"
@@ -97,23 +70,17 @@ function FormCreateUser() {
                             value={inputPassword}
                             required />
 
-                        <Input
-                            type="password"
-                            placeholder="CONFIRM PASSWORD"
-                            name="confirmPassword"
-                            onChange={inputsHandler}
-                            value={inputConfirmPassword}
-                            required />
-                        <DifferentPasswordsParagraph>{differentPasswordsBool ? "DIFFERENT PASSWORDS!" : ""}</DifferentPasswordsParagraph>
-                        <ButtonSubmit type='submit' disabled={differentPasswordsBool}><ArrowRight /></ButtonSubmit>
+                        <ButtonSubmit type='submit'><ArrowRight /></ButtonSubmit>
 
                     </form>
                 </InputMain>
             </ThemeProvider>
         </MainDiv>
     )
+
 }
-export default FormCreateUser
+
+export default FormLogin
 
 const InputMain = styled.div`
     position: absolute;
@@ -161,14 +128,6 @@ const Title = styled.h3`
     opacity: ${props => (props.theme.open ? "0.9" : "0")};
     transition: opacity 1s;
     transition-delay: 0.5s;
-`
-
-const DifferentPasswordsParagraph = styled.p`
-    font-weight: 900;
-    font-size: 0.9rem;
-    color: #5c5c5c;
-    letter-spacing: 0.01rem;
-    position: absolute;
 `
 
 const ButtonSubmit = styled.button`
