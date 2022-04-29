@@ -100,6 +100,12 @@ interface iLoginUserProps {
     
 }
 
+interface iAuthProvider {
+    isAuthed: () => Promise<boolean>,
+    onLogin: (props: iLoginUserProps) => Promise<void>,
+    onLogout: () => Promise<void>
+}
+
 export { 
     iButtonTheme,
     iResponse,
@@ -116,5 +122,6 @@ export {
     iCreateUser,
     iCreateUserProps,
     iLoginUser,
-    iLoginUserProps
+    iLoginUserProps,
+    iAuthProvider
 }

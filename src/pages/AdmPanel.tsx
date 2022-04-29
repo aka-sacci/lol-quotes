@@ -1,30 +1,29 @@
-import { useEffect } from 'react'
+import LogoutUser from '../services/LogoutUser'
 import MainWrapper from '../components/MainWrapper'
-import JWTAuth from 'services/JWTAuth'
+import { useState } from 'react'
+import ErrorWrapper from '../components/ErrorWrapper'
 import { useNavigate } from 'react-router-dom'
 
-
-
 function AdmPanel() {
-    const nav = useNavigate()
     const background = require("../images/riot-wallpaper2.jpg")
+    const [error, setError] = useState<Error>(Error)
+    const [errorBool, setErrorBool] = useState<boolean>(false)
+    const nav = useNavigate()
 
-    useEffect(() => {
-        const fetchAuth = async () => {
-            const booleanIsAuthed = await JWTAuth()
-            return booleanIsAuthed
+    const handleClick = async () => {
+        try {
+            await LogoutUser()
+            nav('/login')
+        } catch (err: any) {
+            setError(err)
+            setErrorBool(true)
         }
-
-        fetchAuth()
-            .then((booleanIsAuthed: boolean) => {
-                if (booleanIsAuthed === false) nav("/login")
-            })
-            .catch()
-    }, [nav])
+    }
 
     return (
         <MainWrapper background={background}>
-            <h1>Logado</h1>
+            {errorBool ? <ErrorWrapper error={error} /> : <></>}
+            <button onClick={handleClick}>Logout</button>
         </MainWrapper>
     )
 }

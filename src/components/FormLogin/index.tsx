@@ -1,11 +1,10 @@
 import { iEvent } from '@app/@types/myTypes'
-import { useEffect, useState } from 'react'
+import { useContext, useEffect, useState } from 'react'
 import styled, { ThemeProvider } from 'styled-components'
 import { ArrowRight } from "react-bootstrap-icons"
-import loginUser from '../../services/LoginUser'
 import ErrorWrapper from '../ErrorWrapper'
 import { useNavigate } from 'react-router-dom'
-
+import { AuthContext } from '../../providers/AuthProvider'
 
 function FormLogin() {
     const [inputEmail, setInputEmail] = useState<string>("")
@@ -14,7 +13,8 @@ function FormLogin() {
     const [errorBool, setErrorBool] = useState<boolean>(false)
     const [isOpened, setIsOpened] = useState(false)
     const nav = useNavigate()
-    const LoginUser = new loginUser()
+    const { onLogin } = useContext(AuthContext)
+
 
     useEffect(() => {
         setIsOpened(true)
@@ -35,10 +35,11 @@ function FormLogin() {
         e.preventDefault()
         setErrorBool(false)
         try {
-            await LoginUser.execute({ email: inputEmail, password: inputPassword })
+            await onLogin({ email: inputEmail, password: inputPassword })
             nav('/admpanel')
 
         } catch (err: any) {
+            setInputPassword("")
             setError(err)
             setErrorBool(true)
         }
