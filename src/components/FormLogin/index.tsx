@@ -146,6 +146,4 @@ const ButtonSubmit = styled.button`
     :disabled {
         border: 2px solid #bbbdbf;
     }
-    
-
 `

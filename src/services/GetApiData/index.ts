@@ -9,7 +9,6 @@ class getApiData implements iGetApiData {
         champion: "",
         quote: "",
         length: 0,
-        index: 0
     }
 
     allQuotes: iQuotes = {

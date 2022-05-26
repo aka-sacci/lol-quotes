@@ -68,12 +68,12 @@ function App() {
     try {
       const auxQuoteQtd = quotes.length
       const auxQuoteIndex = selectQuoteIndex(auxQuoteQtd)
-      const { champion, quote, length } = quotes[auxQuoteIndex]
+      const { champion, quote, length, _id } = quotes[auxQuoteIndex]
       setChampion(champion)
       setQuote(quote)
       setQuoteLength(length)
       setErrorBool(false)
-      setQuoteIndex(auxQuoteIndex)
+      setQuoteIndex(_id)
     } catch (err: any) {
       setError(err)
       setErrorBool(true)

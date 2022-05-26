@@ -53,7 +53,6 @@ interface iQuote {
     champion: string,
     quote: string,
     length: number,
-    index: number
 }
 
 interface iQuotes {
@@ -63,7 +62,8 @@ interface iQuotes {
 
 interface iMainWrapperProps {
     background: string,
-    children: object
+    children: object,
+    isInfinite?: boolean
 }
 
 interface iLoginWrapperProps {
