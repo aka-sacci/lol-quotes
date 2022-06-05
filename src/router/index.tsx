@@ -5,6 +5,7 @@ import Login from '../pages/Login';
 import Success from '../pages/Success';
 import AdmPanel from '../pages/AdmPanel';
 import QuotesView from '../pages/QuotesView';
+import AddQuote from '../pages/AddQuote';
 import { AuthContextProvider } from '../providers/AuthProvider';
 import AuthProtectedRoute from './AuthProtectedRoute';
 import AuthUnprotectedRoute from './AuthUnprotectedRoute';
@@ -37,6 +38,11 @@ const Router = () => {
                 <Route path='admpanel/quotes' element={
                     <AuthProtectedRoute>
                         <QuotesView />
+                    </AuthProtectedRoute>
+                } />
+                <Route path='admpanel/quotes/addquote/:champion' element={
+                    <AuthProtectedRoute>
+                        <AddQuote />
                     </AuthProtectedRoute>
                 } />
             </Routes>

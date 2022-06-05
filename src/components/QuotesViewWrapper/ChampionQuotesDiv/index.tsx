@@ -1,12 +1,16 @@
-import styled from "styled-components"
-import { useEffect, useRef, useState } from 'react'
-import { iQuote } from "../../../@types/myTypes"
-import { PlayFill, StopFill } from "react-bootstrap-icons"
+import styled from "styled-components";
+import { useEffect, useRef, useState } from 'react';
+import { iQuote } from "../../../@types/myTypes";
+import { PlayFill, StopFill } from "react-bootstrap-icons";
+import { ThemeProvider } from 'styled-components';
+import { useNavigate } from 'react-router-dom'
 
 function ChampionQuotesDiv(quotes: any) {
 
     const [isPlaying, setIsPlaying] = useState<Array<boolean>>([]);
     const audioRef = useRef<Array<any>>([document.createElement('audio')]);
+    const [isHovered, setIsHovered] = useState(false)
+    const nav = useNavigate()
 
     //Para cada fala cadastrada, cria um novo elemento no isPlaying (padrão false, pois começa tudo mutado)
     useEffect(() => {
@@ -19,11 +23,16 @@ function ChampionQuotesDiv(quotes: any) {
 
     //Retorna a imagem do champion
     const returnChampionImg = () => {
-        return <ChampionImg
-            src={`/images/icons/ChampionIcons/${quotes.quotes[0].champion}.jpg`}
-            alt={quotes.quotes[0].champion}
-
-        />
+        return <ChampionImgQuote
+            onClick={() => nav('/admpanel/quotes/addquote/' + quotes.quotes[0].champion)}
+            onMouseOver={() => setIsHovered(true)}
+            onMouseOut={() => setIsHovered(false)}>
+            <ChampionImg
+                src={`/images/icons/ChampionIcons/${quotes.quotes[0].champion}.jpg`}
+                alt={quotes.quotes[0].champion}
+            />
+            <DivAddQuote>Adicionar nova fala</DivAddQuote>
+        </ChampionImgQuote>
     }
 
     //Retorna o nome do campeão
@@ -60,7 +69,7 @@ function ChampionQuotesDiv(quotes: any) {
                 key={`audio${quote._id}`}
                 onEnded={() => resetIsPlaying(index)} />
             <TogglePlayPauseBtn onClick={() => togglePlayPause(index)} key={`button${quote._id}`}>
-                {!isPlaying[index] ? <PlayFill/> : <StopFill/>}
+                {!isPlaying[index] ? <PlayFill /> : <StopFill />}
             </TogglePlayPauseBtn>
             <ItalicQuote>"{quote.quote}"</ItalicQuote>
         </p>
@@ -92,14 +101,16 @@ function ChampionQuotesDiv(quotes: any) {
 
     return (
         <>
-            <ChampionQuotesMainDiv>
-                <ChampionQuotesTitleDiv>
-                    {returnChampionImg()}
-                    {returnChampionName()}
-                    {countQtdQuotes()}
-                </ChampionQuotesTitleDiv>
-                {returnAllAudiosElements()}
-            </ChampionQuotesMainDiv>
+            <ThemeProvider theme={{ isHovered }}>
+                <ChampionQuotesMainDiv>
+                    <div>
+                        {returnChampionImg()}
+                        {returnChampionName()}
+                        {countQtdQuotes()}
+                    </div>
+                    {returnAllAudiosElements()}
+                </ChampionQuotesMainDiv>
+            </ThemeProvider>
         </>
     )
 }
@@ -109,11 +120,10 @@ export default ChampionQuotesDiv
 const ChampionQuotesMainDiv = styled.div`
     margin-top: 3rem;
     display: block;
-`
-
-const ChampionQuotesTitleDiv = styled.div`
-
-`
+` 
+const ChampionImgQuote = styled.div`
+    cursor: pointer;
+  `
 
 const ChampionImg = styled.img`
     max-width: 20vw;
@@ -123,14 +133,24 @@ const ChampionImg = styled.img`
     margin-top: 2rem;
     float: left;
     margin-right: 1rem;
+    opacity: ${props => props.theme.isHovered ? 0.5 : 1};
   `
+
+const DivAddQuote = styled.div`
+    position: absolute;
+    margin-top: 6.5rem;
+    margin-left: 0.5rem;
+    float: left;
+    font-size: 0.9rem;
+    font-weight: 900;
+    opacity: ${props => props.theme.isHovered ? 1 : 0};
+`
 
 const ChampionName = styled.p`
     display: flex;
     margin-top: 5.5rem;
     font-size: 2.5rem;
     font-weight: bolder;
-    
 `
 
 const ChampionQuotesQtd = styled.p`
@@ -160,3 +180,4 @@ const TogglePlayPauseBtn = styled.button`
 const ItalicQuote = styled.i`
     margin-left: 0.5rem;
 `
+
